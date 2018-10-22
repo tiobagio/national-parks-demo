@@ -41,6 +41,18 @@ resource "aws_instance" "permanent_peer" {
     use_sudo     = true
     service_type = "systemd"
 
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
     connection {
       host        = "${self.public_ip}"
       type        = "ssh"
@@ -99,6 +111,18 @@ resource "aws_instance" "mongodb" {
       name     = "core/mongodb"
       channel  = "stable"
       user_toml = "${file("files/mongo.toml")}"
+    }
+
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
     }
 
     connection {
@@ -162,6 +186,18 @@ resource "aws_instance" "national_parks" {
       binds    = ["database:mongodb.default"]
     }
 
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
     connection {
       host        = "${self.public_ip}"
       type        = "ssh"
@@ -220,6 +256,18 @@ resource "aws_instance" "haproxy" {
       channel  = "stable"
       binds    = ["backend:national-parks.default"]
       user_toml = "${file("files/haproxy.toml")}" 
+    }
+
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
     }
 
     connection {
