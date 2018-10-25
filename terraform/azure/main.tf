@@ -406,6 +406,18 @@ resource "azurerm_virtual_machine" "permanent-peer" {
     permanent_peer = true
     use_sudo       = true
     service_type   = "systemd"
+  
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
 
     connection {
       host        = "${azurerm_public_ip.permanent-peer-pip.ip_address}"
@@ -472,6 +484,18 @@ resource "azurerm_virtual_machine" "mongodb" {
     peer         = "${azurerm_public_ip.permanent-peer-pip.ip_address}"
     use_sudo     = true
     service_type = "systemd"
+
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
 
     service {
       name       = "core/mongodb"
@@ -548,6 +572,18 @@ resource "azurerm_virtual_machine" "app" {
     service_type = "systemd"
 
     service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
       binds    = ["database:mongodb.${var.group}"]
       name     = "${var.habitat_origin}/national-parks"
       topology = "standalone"
@@ -622,6 +658,18 @@ resource "azurerm_virtual_machine" "haproxy" {
     peer         = "${azurerm_public_ip.permanent-peer-pip.ip_address}"
     use_sudo     = true
     service_type = "systemd"
+
+    service {
+      name     = "${var.origin}/chef-base"
+      channel  = "stable"
+      strategy = "at-once"
+    }
+
+    service {
+      name     = "${var.origin}/compliance"
+      channel  = "stable"
+      strategy = "at-once"
+    }
 
     service {
       binds       = ["backend:national-parks.${var.group}"]
